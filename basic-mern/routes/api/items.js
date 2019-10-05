@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
 });
 
 // @route Post api/items
-// @desc Create A Post
+// @desc Create A item
 // @access Public , would normally be private if auth
 router.post("/", (req, res) => {
   const newItem = new Item({
@@ -25,7 +25,16 @@ router.post("/", (req, res) => {
   newItem
     .save()
     .then(item => res.json(item))
-    .catch(err => res.status(404).json({ sucess: false }));
+    .catch(err => console.log(err));
+});
+
+// @route Delete api/items/:id
+// @desc Delete an item
+// @access Public , would normally be private if auth
+router.delete("/:id", (req, res) => {
+  Item.findById(req.params.id)
+    .then(item => item.remove().then(() => res.json({ success: true })))
+    .catch(err => res.status(404).json({ success: false }));
 });
 
 module.exports = router;
